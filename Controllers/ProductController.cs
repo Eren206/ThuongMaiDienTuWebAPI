@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ThuongMaiDienTuWebAPI.Dto;
+using ThuongMaiDienTuWebAPI.Interface;
+using ThuongMaiDienTuWebAPI.Models;
+using ThuongMaiDienTuWebAPI.Repository;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ThuongMaiDienTuWebAPI.Controllers
@@ -8,18 +12,37 @@ namespace ThuongMaiDienTuWebAPI.Controllers
     [ApiController]
     public class ProductController : Controller
     {
-        // GET: api/<ProductController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private const int pageSize = 20;
+        public IProductRepo productRepo { get; set; }
+        public IMapper mapper { get; set; }
+        public ProductController(IProductRepo productRepo, IMapper mapper)
         {
-            return new string[] { "value1", "value2" };
+            this.productRepo = productRepo;
+            this.mapper = mapper;
+        }
+        // GET: api/<ProductController>/detail/sp001
+        [HttpGet()]
+        public IActionResult GetDetailProduct([FromQuery]string productId)
+        {
+            var product= mapper.Map<ProductDto>(productRepo.GetProductById(productId));
+            return Ok(product);
         }
 
-        // GET api/<ProductController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<ProductController>/search/keyword=sp&....
+        [HttpGet("search/")]
+        public IActionResult GetProductByName([FromQuery] string keyword,
+        [FromQuery] int? minPrice,
+        [FromQuery] int? maxPrice,
+        [FromQuery] int? page,
+        [FromQuery] int? brandId
+        )
         {
-            return "value";
+            var products = productRepo.SearchProducts(keyword,(int)page,(int)minPrice,(int)maxPrice,(int)brandId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok(products);
         }
 
         // POST api/<ProductController>
@@ -29,15 +52,28 @@ namespace ThuongMaiDienTuWebAPI.Controllers
         }
 
         // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut()]
+        public IActionResult Put([FromQuery] string productId, [FromBody] ProductDto product )
         {
+            if(!productRepo.ProductExist(productId))
+            {
+                return NotFound();
+            }
+            return Ok();
         }
 
         // DELETE api/<ProductController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete()]
+        public IActionResult Delete([FromQuery] string productId)
         {
-        }
+            try {
+                productRepo.DeleteProduct(productId);
+            }
+            catch(Exception ex)
+            {
+                return Ok(ex);
+            }
+            return Ok("Đã xóa (ngưng bán) sản phẩm!");
+            }
     }
 }

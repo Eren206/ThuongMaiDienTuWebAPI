@@ -5,12 +5,14 @@ using System.Collections.Generic;
 
 namespace ThuongMaiDienTuWebAPI.Models
 {
-    public partial class ProductImage
+    public partial class Price
     {
-        public int ProImageId { get; set; }
+        public int PriceId { get; set; }
+        public double ImportPrice { get; set; }
+        public double Profit { get; set; }
+        public DateTime ModifiedAt { get; set; }
         public string ProductId { get; set; }
-        public string ImagePath { get; set; }
-        public bool IsAvatar { get; set; }
+        public int IsEffect { get; set; }
 
         public virtual Product Product { get; set; }
     }

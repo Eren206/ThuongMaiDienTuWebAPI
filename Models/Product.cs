@@ -29,7 +29,7 @@ namespace ThuongMaiDienTuWebAPI.Models
         public string IndoorWarranty { get; set; }
         public string OutdoorWarranty { get; set; }
         public string RealeaseDate { get; set; }
-        public decimal Price { get; set; }
+        public int InventoryQuantity { get; set; }
         public string RadiatorMaterial { get; set; }
         public int BrandId { get; set; }
         public string ProductStatus { get; set; }

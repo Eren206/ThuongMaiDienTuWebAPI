@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ThuongMaiDienTuWebAPI.Models;
 
-namespace ThuongMaiDienTuWebAPI.Models
+namespace ThuongMaiDienTuWebAPI.Data
 {
     public partial class DataContext : DbContext
     {
@@ -28,6 +29,7 @@ namespace ThuongMaiDienTuWebAPI.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
+        public virtual DbSet<Price> Prices { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductArticle> ProductArticles { get; set; }
         public virtual DbSet<ProductFeature> ProductFeatures { get; set; }
@@ -45,6 +47,12 @@ namespace ThuongMaiDienTuWebAPI.Models
                 entity.Property(e => e.AccountId)
                     .ValueGeneratedNever()
                     .HasColumnName("account_id");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("email");
 
                 entity.Property(e => e.Password)
                     .IsRequired()
@@ -95,7 +103,7 @@ namespace ThuongMaiDienTuWebAPI.Models
 
                 entity.Property(e => e.CityId)
                     .IsRequired()
-                    .HasMaxLength(3)
+                    .HasMaxLength(2)
                     .HasColumnName("city_id")
                     .IsFixedLength();
 
@@ -121,7 +129,7 @@ namespace ThuongMaiDienTuWebAPI.Models
 
                 entity.Property(e => e.WardId)
                     .IsRequired()
-                    .HasMaxLength(3)
+                    .HasMaxLength(5)
                     .HasColumnName("ward_id")
                     .IsFixedLength();
 
@@ -233,6 +241,15 @@ namespace ThuongMaiDienTuWebAPI.Models
                 entity.Property(e => e.EmployeeId)
                     .ValueGeneratedNever()
                     .HasColumnName("employee_id");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("address");
+
+                entity.Property(e => e.BirthDate)
+                    .HasColumnType("date")
+                    .HasColumnName("birth_date");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -393,6 +410,37 @@ namespace ThuongMaiDienTuWebAPI.Models
                     .HasConstraintName("FK_OrderStatus_Status");
             });
 
+            modelBuilder.Entity<Price>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Price");
+
+                entity.Property(e => e.ImportPrice).HasColumnName("import_price");
+
+                entity.Property(e => e.IsEffect).HasColumnName("is_effect");
+
+                entity.Property(e => e.ModifiedAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("modified_at");
+
+                entity.Property(e => e.PriceId).HasColumnName("price_id");
+
+                entity.Property(e => e.ProductId)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .HasColumnName("product_id")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Profit).HasColumnName("profit");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Price_Product");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
@@ -426,6 +474,8 @@ namespace ThuongMaiDienTuWebAPI.Models
 
                 entity.Property(e => e.IndoorWeight).HasColumnName("indoor_weight");
 
+                entity.Property(e => e.InventoryQuantity).HasColumnName("inventory_quantity");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -446,10 +496,6 @@ namespace ThuongMaiDienTuWebAPI.Models
                 entity.Property(e => e.OutdoorWeight).HasColumnName("outdoor_weight");
 
                 entity.Property(e => e.PowerComsumption).HasColumnName("power_comsumption");
-
-                entity.Property(e => e.Price)
-                    .HasColumnType("money")
-                    .HasColumnName("price");
 
                 entity.Property(e => e.ProductStatus)
                     .IsRequired()
@@ -564,6 +610,8 @@ namespace ThuongMaiDienTuWebAPI.Models
                     .HasMaxLength(500)
                     .IsUnicode(false)
                     .HasColumnName("image_path");
+
+                entity.Property(e => e.IsAvatar).HasColumnName("is_avatar");
 
                 entity.Property(e => e.ProductId)
                     .IsRequired()

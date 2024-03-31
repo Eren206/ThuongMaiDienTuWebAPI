@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using ThuongMaiDienTuWebAPI.Interface;
 using ThuongMaiDienTuWebAPI.Models;
+using ThuongMaiDienTuWebAPI.Data;
+using ThuongMaiDienTuWebAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +12,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DataContext>(options =>
 {
