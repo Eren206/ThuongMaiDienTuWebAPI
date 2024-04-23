@@ -47,9 +47,18 @@ namespace ThuongMaiDienTuWebAPI.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult CreateProducts([FromBody] ProductDto productDto)
         {
+            var prodcuct = mapper.Map<ProductDto>(productDto);
+            if (prodcuct == null)   
+            {
+                return BadRequest(ModelState);
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(prodcuct);
         }
+       
 
         // PUT api/<ProductController>/5
         [HttpPut()]
@@ -64,7 +73,7 @@ namespace ThuongMaiDienTuWebAPI.Controllers
 
         // DELETE api/<ProductController>/5
         [HttpDelete()]
-        public IActionResult Delete([FromQuery] string productId)
+        public IActionResult DeleteProduct([FromQuery] string productId)
         {
             try {
                 productRepo.DeleteProduct(productId);

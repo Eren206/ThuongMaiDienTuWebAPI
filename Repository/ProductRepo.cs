@@ -1,8 +1,8 @@
-﻿using ThuongMaiDienTuWebAPI.Models;
-using ThuongMaiDienTuWebAPI.Interface;
-using ThuongMaiDienTuWebAPI.Data;
+﻿using ThuongMaiDienTuWebAPI.Data;
 using ThuongMaiDienTuWebAPI.Dto;
 using ThuongMaiDienTuWebAPI.Helper;
+using ThuongMaiDienTuWebAPI.Interface;
+using ThuongMaiDienTuWebAPI.Models;
 namespace ThuongMaiDienTuWebAPI.Repository
 {
     public class ProductRepo : IProductRepo
