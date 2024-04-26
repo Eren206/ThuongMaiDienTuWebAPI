@@ -12,7 +12,10 @@ namespace ThuongMaiDienTuWebAPI.Repository
         {
             this.context = context;
         }
-
+        public IEnumerable<Customer> getAll()
+        {
+            return context.Customers.OrderBy(c => c.PhoneNumber).ToList();
+        }
         public bool AddCustomer(Customer customer)
         {
             context.Customers.Add(customer);

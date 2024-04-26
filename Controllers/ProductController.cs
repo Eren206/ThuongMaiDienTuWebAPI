@@ -14,10 +14,12 @@ namespace ThuongMaiDienTuWebAPI.Controllers
     {
         private const int pageSize = 20;
         public IProductRepo productRepo { get; set; }
+        
         public IMapper mapper { get; set; }
-        public ProductController(IProductRepo productRepo, IMapper mapper)
+        public ProductController(IProductRepo productRepo , IMapper mapper)
         {
             this.productRepo = productRepo;
+            
             this.mapper = mapper;
         }
         // GET: api/<ProductController>/detail/sp001
@@ -49,14 +51,14 @@ namespace ThuongMaiDienTuWebAPI.Controllers
         [HttpPost]
         public IActionResult CreateProducts([FromBody] ProductDto productDto)
         {
-            var prodcuct = mapper.Map<ProductDto>(productDto);
-            if (prodcuct == null)   
+            var product = mapper.Map<ProductDto>(productDto);
+            if (product == null)   
             {
                 return BadRequest(ModelState);
             }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(prodcuct);
+            return Ok(product);
         }
        
 
@@ -84,5 +86,6 @@ namespace ThuongMaiDienTuWebAPI.Controllers
             }
             return Ok("Đã xóa (ngưng bán) sản phẩm!");
             }
+        
     }
 }

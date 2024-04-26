@@ -4,6 +4,7 @@ namespace ThuongMaiDienTuWebAPI.Interface
 {
     public interface ICustomerRepo
     {
+        IEnumerable<Customer> GetAll();
         Customer GetCustomerByPhoneNumber(string PhoneNumber);
         bool CustomerExist(int id);
         bool AddCustomer(Customer customer);

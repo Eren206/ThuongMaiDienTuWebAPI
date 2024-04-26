@@ -1,4 +1,5 @@
-﻿using ThuongMaiDienTuWebAPI.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using ThuongMaiDienTuWebAPI.Controllers;
 using ThuongMaiDienTuWebAPI.Dto;
 
 namespace ThuongMaiDienTuWebAPI.Interface
@@ -9,5 +10,6 @@ namespace ThuongMaiDienTuWebAPI.Interface
         bool AddCartItem();
         bool UpdateCart();
         bool DeleteCartItem();
+        bool AddToCart(int cartId, int quantity = 1);
     }
 }

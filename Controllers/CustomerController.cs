@@ -18,24 +18,33 @@ namespace ThuongMaiDienTuWebAPI.Controllers
             this.customerRepo = customerRepo;
             this.mapper = mapper;
         }
+        [HttpGet("Danh sách khách hàng")]
+        public IActionResult GetCustomers() {
+            var customers = mapper.Map<List<CustomerDto>>(customerRepo.GetAll());
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok(customers);
+        }
 
         [HttpGet("{phoneNumber}")]
         public IActionResult GetCustomerByPhoneNumber([FromQuery] string PhoneNumer)
         {
-            var customer = mapper.Map<CustomerDto>(customerRepo.GetCustomerById(customerId));
+            var customer = mapper.Map<CustomerDto>(customerRepo.GetCustomerByPhoneNumber(PhoneNumer));
             return Ok(customer);
         }
         [HttpPost]
         public IActionResult AddCustomer([FromBody] CustomerDto customerDto)
         {
-            var prodcuct = mapper.Map<CustomerDto>(customerDto);
-            if (prodcuct == null)
+            var customer = mapper.Map<CustomerDto>(customerDto);
+            if (customer == null)
             {
                 return BadRequest(ModelState);
             }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(prodcuct);
+            return Ok(customer);
         }
         [HttpPut()]
         public IActionResult UpdateCustomer([FromQuery] int customerId, [FromBody] CustomerDto customer)
@@ -46,5 +55,6 @@ namespace ThuongMaiDienTuWebAPI.Controllers
             }
             return Ok();
         }
+
     }
 }

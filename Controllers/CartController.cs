@@ -10,7 +10,7 @@ namespace ThuongMaiDienTuWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartController : ControllerBase
+    public class CartController : Controller
     {
         public ICartRepo cartRepo { get; set; }
         public IMapper mapper { get; set; }
@@ -20,7 +20,8 @@ namespace ThuongMaiDienTuWebAPI.Controllers
         }
         [HttpGet("{cartId}")]
         public IActionResult GetCartItem(int cartId) {
-              var 
+              
         }
+        
     }
 }
